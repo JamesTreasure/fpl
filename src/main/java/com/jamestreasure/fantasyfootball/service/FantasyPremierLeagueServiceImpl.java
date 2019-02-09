@@ -1,6 +1,7 @@
 package com.jamestreasure.fantasyfootball.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jamestreasure.fantasyfootball.dto.CurrentGameweek;
 import com.jamestreasure.fantasyfootball.dto.GameweekEventWrapper;
 import com.jamestreasure.fantasyfootball.dto.FantasyApiRequestWrapper;
 import com.jamestreasure.fantasyfootball.dto.UserPicksWrapper;
@@ -46,5 +47,22 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
         HttpResponse<JsonNode> league = fantasyPremierLeagueApi.getPicksByGameweekAndUserId(gameweek, userId);
         JSONObject json = league.getBody().getObject();
         return objectMapper.readValue(json.toString(), UserPicksWrapper.class);
+    }
+
+    @Override
+    public CurrentGameweek getCurrentGameweek() throws UnirestException, IOException {
+        for(int i = 1; i < 39; i++){
+            System.out.println("Checking gameweek " + i);
+            GameweekEventWrapper gameweekEventWrapper = getEvent(i);
+            int size = gameweekEventWrapper.getFixtures().size();
+            Boolean isFinished = gameweekEventWrapper.getFixtures().get(size-1).getFinished();
+            if(!isFinished){
+                CurrentGameweek currentGameweek = new CurrentGameweek();
+                currentGameweek.setCurrentGameweek(i);
+                currentGameweek.setLive(gameweekEventWrapper.getFixtures().get(0).getStarted());
+                return currentGameweek;
+            }
+        }
+        return new CurrentGameweek();
     }
 }

@@ -1,5 +1,6 @@
 package com.jamestreasure.fantasyfootball.service;
 
+import com.jamestreasure.fantasyfootball.dto.CurrentGameweek;
 import com.jamestreasure.fantasyfootball.dto.GameweekEventWrapper;
 import com.jamestreasure.fantasyfootball.dto.FantasyApiRequestWrapper;
 import com.jamestreasure.fantasyfootball.dto.UserPicksWrapper;
@@ -15,5 +16,5 @@ public interface FantasyPremierLeagueService {
 
     UserPicksWrapper getPicksByGameweekAndUserId(Integer gameweek, Integer userId) throws UnirestException, IOException;
 
-
+    CurrentGameweek getCurrentGameweek() throws UnirestException, IOException;
 }

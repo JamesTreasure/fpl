@@ -1,5 +1,6 @@
 package com.jamestreasure.fantasyfootball.rest;
 
+import com.jamestreasure.fantasyfootball.dto.CurrentGameweek;
 import com.jamestreasure.fantasyfootball.dto.GameweekEventWrapper;
 import com.jamestreasure.fantasyfootball.dto.FantasyApiRequestWrapper;
 import com.jamestreasure.fantasyfootball.dto.UserPicksWrapper;
@@ -36,6 +37,12 @@ public class FantasyPremierLeagueResource {
     public UserPicksWrapper getPicksByGameweekAndUserId(@PathVariable String gameweek, @PathVariable String userId) throws IOException, UnirestException {
         UserPicksWrapper userPicksWrapper = fantasyPremierLeagueService.getPicksByGameweekAndUserId(Integer.parseInt(gameweek), Integer.parseInt(userId));
         return userPicksWrapper;
+    }
+
+    @RequestMapping(value = "currentGameweek", method = RequestMethod.GET)
+    public CurrentGameweek getCurrentGameweek() throws IOException, UnirestException {
+        CurrentGameweek currentGameweek = fantasyPremierLeagueService.getCurrentGameweek();
+        return currentGameweek;
     }
 
 }

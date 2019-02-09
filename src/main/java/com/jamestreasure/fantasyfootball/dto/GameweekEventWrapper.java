@@ -15,5 +15,19 @@ public class GameweekEventWrapper {
     @JsonProperty("elements")
     private Map<Integer, EventWrapper> elements;
 
+    public List<Fixture> getFixtures() {
+        return fixtures;
+    }
 
+    public void setFixtures(List<Fixture> fixtures) {
+        this.fixtures = fixtures;
+    }
+
+    public Map<Integer, EventWrapper> getElements() {
+        return elements;
+    }
+
+    public void setElements(Map<Integer, EventWrapper> elements) {
+        this.elements = elements;
+    }
 }
