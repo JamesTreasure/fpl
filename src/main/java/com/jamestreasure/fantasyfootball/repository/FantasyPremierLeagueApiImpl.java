@@ -9,26 +9,52 @@ import org.springframework.stereotype.Component;
 @Component
 public class FantasyPremierLeagueApiImpl implements FantasyPremierLeagueApi {
 
-    @Override
-    public HttpResponse<JsonNode> getLeague(Integer leagueId) throws UnirestException {
-        return Unirest.get("https://fantasy.premierleague.com/drf/leagues-classic-standings/" + leagueId)
-                .header("accept", "application/json")
-                .asJson();
-    }
+  @Override
+  public HttpResponse<JsonNode> getAbout() throws UnirestException {
+    return Unirest.get("https://fantasy.premierleague.com/api/bootstrap-static/")
+        .header("accept", "application/json")
+        .asJson();
+  }
 
-    @Override
-    public HttpResponse<JsonNode> getEvent(Integer gameweek) throws UnirestException {
-        return Unirest.get("https://fantasy.premierleague.com/drf/event/" + gameweek + "/live")
-                .header("accept", "application/json")
-                .asJson();
-    }
+  @Override
+  public HttpResponse<JsonNode> getLeague(Integer leagueId) throws UnirestException {
+    return Unirest.get(
+            "https://fantasy.premierleague.com/api/leagues-classic/" + leagueId + "/standings/")
+        .header("accept", "application/json")
+        .asJson();
+  }
 
-    @Override
-    public HttpResponse<JsonNode> getPicksByGameweekAndUserId(Integer gameweek, Integer userId) throws UnirestException {
-        return Unirest.get("https://fantasy.premierleague.com/drf/entry/" + userId + "/event/" + gameweek + "/picks")
-                .header("accept", "application/json")
-                .asJson();
-    }
+  @Override
+  public HttpResponse<JsonNode> getFixtures(Integer gameweek) throws UnirestException {
+    return Unirest.get("https://fantasy.premierleague.com/api/fixtures/?event=" + gameweek + "/")
+        .header("accept", "application/json")
+        .asJson();
+  }
 
+  @Override
+  public HttpResponse<JsonNode> getEvent(Integer gameweek) throws UnirestException {
+    return Unirest.get("https://fantasy.premierleague.com/api/event/" + gameweek + "/live/")
+        .header("accept", "application/json")
+        .asJson();
+  }
 
+  @Override
+  public HttpResponse<JsonNode> getEventStatus() throws UnirestException {
+    return Unirest.get("https://fantasy.premierleague.com/api/event-status/")
+        .header("accept", "application/json")
+        .asJson();
+  }
+
+  @Override
+  public HttpResponse<JsonNode> getPicksByGameweekAndUserId(Integer gameweek, Integer userId)
+      throws UnirestException {
+    return Unirest.get(
+            "https://fantasy.premierleague.com/api/entry/"
+                + userId
+                + "/event/"
+                + gameweek
+                + "/picks/")
+        .header("accept", "application/json")
+        .asJson();
+  }
 }
