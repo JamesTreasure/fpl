@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ChipPlaysItem {
+public class ChipPlays {
 
   @JsonProperty("chip_name")
   private String chipName;

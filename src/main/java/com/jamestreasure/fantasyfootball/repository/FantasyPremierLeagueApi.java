@@ -14,8 +14,13 @@ public interface FantasyPremierLeagueApi {
 
   HttpResponse<JsonNode> getEvent(Integer gameweek) throws UnirestException;
 
+  HttpResponse<JsonNode> getEntry(Integer userId) throws UnirestException;
+
   HttpResponse<JsonNode> getEventStatus() throws UnirestException;
 
   HttpResponse<JsonNode> getPicksByGameweekAndUserId(Integer gameweek, Integer userId)
       throws UnirestException;
+
+  HttpResponse<JsonNode> getTransfers(Integer userId)
+          throws UnirestException;
 }

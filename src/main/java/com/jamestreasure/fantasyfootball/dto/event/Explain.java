@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExplainItem {
+public class Explain {
 
   @JsonProperty("fixture")
   private int fixture;

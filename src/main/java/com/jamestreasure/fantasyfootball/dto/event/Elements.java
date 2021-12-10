@@ -8,10 +8,10 @@ import java.util.List;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ElementsItem {
+public class Elements {
 
   @JsonProperty("explain")
-  private List<ExplainItem> explain;
+  private List<Explain> explain;
 
   @JsonProperty("stats")
   private Stats stats;

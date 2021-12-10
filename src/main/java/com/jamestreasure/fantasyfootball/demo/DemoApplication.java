@@ -48,4 +48,5 @@ public class DemoApplication {
   public ObjectMapper mapper() {
     return new ObjectMapper();
   }
+
 }

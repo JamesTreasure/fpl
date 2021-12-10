@@ -10,6 +10,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserPicksWrapper {
 
+  @JsonProperty("user_id")
+  private Integer userId;
+
   @JsonProperty("entry_history")
   private EntryHistory entryHistory;
 

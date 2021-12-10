@@ -26,7 +26,7 @@ public class FantasyPremierLeagueApiImpl implements FantasyPremierLeagueApi {
 
   @Override
   public HttpResponse<JsonNode> getFixtures(Integer gameweek) throws UnirestException {
-    return Unirest.get("https://fantasy.premierleague.com/api/fixtures/?event=" + gameweek + "/")
+    return Unirest.get("https://fantasy.premierleague.com/api/fixtures/?event=" + gameweek)
         .header("accept", "application/json")
         .asJson();
   }
@@ -36,6 +36,13 @@ public class FantasyPremierLeagueApiImpl implements FantasyPremierLeagueApi {
     return Unirest.get("https://fantasy.premierleague.com/api/event/" + gameweek + "/live/")
         .header("accept", "application/json")
         .asJson();
+  }
+
+  @Override
+  public HttpResponse<JsonNode> getEntry(Integer userId) throws UnirestException {
+    return Unirest.get("https://fantasy.premierleague.com/api/entry/" + userId + '/' )
+            .header("accept", "application/json")
+            .asJson();
   }
 
   @Override
@@ -56,5 +63,15 @@ public class FantasyPremierLeagueApiImpl implements FantasyPremierLeagueApi {
                 + "/picks/")
         .header("accept", "application/json")
         .asJson();
+  }
+
+  @Override
+  public HttpResponse<JsonNode> getTransfers(Integer userId) throws UnirestException {
+    return Unirest.get(
+                    "https://fantasy.premierleague.com/api/entry/"
+                            + userId
+                            + "/transfers/")
+            .header("accept", "application/json")
+            .asJson();
   }
 }

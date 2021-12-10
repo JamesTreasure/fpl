@@ -35,7 +35,7 @@ public class Event {
   private int mostCaptained;
 
   @JsonProperty("chip_plays")
-  private List<ChipPlaysItem> chipPlays;
+  private List<ChipPlays> chipPlays;
 
   @JsonProperty("top_element")
   private int topElement;

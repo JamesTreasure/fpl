@@ -8,8 +8,14 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FixturesWrapper{
+public class StatsItem{
 
-	@JsonProperty("fixtures")
-	private List<FixturesWrapperItem> fixturesWrapper;
+	@JsonProperty("identifier")
+	private String identifier;
+
+	@JsonProperty("a")
+	private List<AItem> A;
+
+	@JsonProperty("h")
+	private List<HItem> H;
 }

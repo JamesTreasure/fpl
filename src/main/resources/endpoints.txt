@@ -1,0 +1,15 @@
+
+https://fantasy.premierleague.com/api/fixtures/
+https://fantasy.premierleague.com/api/element-summary/{element_id}/
+https://fantasy.premierleague.com/api/event/{event_id}/live/
+https://fantasy.premierleague.com/api/entry/{manager_id}/
+
+https://fantasy.premierleague.com/api/leagues-classic/{league_id}/standings
+https://fantasy.premierleague.com/api/entry/{manager_id}/event/{event_id}/picks/
+https://fantasy.premierleague.com/api/event-status/
+
+
+https://fantasy.premierleague.com/api/entry/{manager_id}/history/
+https://fantasy.premierleague.com/api/bootstrap-static/
+https://fantasy.premierleague.com/api/dream-team/{event_id}}/
+https://fantasy.premierleague.com/api/team/set-piece-notes/

@@ -17,6 +17,9 @@ public class LeagueStandingResult {
   @JsonProperty("player_name")
   private String playerName;
 
+  @JsonProperty("entry_name")
+  private String entryName;
+
   @JsonProperty("rank")
   private Integer rank;
 

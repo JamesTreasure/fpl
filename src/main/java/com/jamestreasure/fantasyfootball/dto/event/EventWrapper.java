@@ -11,5 +11,5 @@ import java.util.List;
 public class EventWrapper {
 
   @JsonProperty("elements")
-  private List<ElementsItem> elements;
+  private List<Elements> elements;
 }
