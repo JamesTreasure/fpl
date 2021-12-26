@@ -10,7 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Standings {
 
-  @JsonProperty("hasNext")
+  @JsonProperty("has_next")
   private Boolean hasNext;
 
   @JsonProperty("page")
