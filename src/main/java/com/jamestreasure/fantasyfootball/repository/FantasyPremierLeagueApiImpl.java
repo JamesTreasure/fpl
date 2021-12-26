@@ -17,9 +17,9 @@ public class FantasyPremierLeagueApiImpl implements FantasyPremierLeagueApi {
   }
 
   @Override
-  public HttpResponse<JsonNode> getLeague(Integer leagueId) throws UnirestException {
+  public HttpResponse<JsonNode> getLeague(Integer leagueId, Integer page) throws UnirestException {
     return Unirest.get(
-            "https://fantasy.premierleague.com/api/leagues-classic/" + leagueId + "/standings/")
+            "https://fantasy.premierleague.com/api/leagues-classic/" + leagueId + "/standings/?page_standings=" + page)
         .header("accept", "application/json")
         .asJson();
   }

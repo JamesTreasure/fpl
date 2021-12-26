@@ -16,6 +16,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -30,6 +31,9 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
 
   private final FantasyPremierLeagueApi fantasyPremierLeagueApi;
   private final ObjectMapper objectMapper;
+  private final Map<Integer, UserPicksWrapper> userPickCache = new HashMap<>();
+    @Autowired
+    CacheManager cacheManager;
 
   @Autowired
   public FantasyPremierLeagueServiceImpl(
@@ -46,10 +50,25 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
   }
 
   @Override
-  public LeagueStandingWrapper getLeague(Integer leagueId) throws UnirestException, IOException {
-    HttpResponse<JsonNode> league = fantasyPremierLeagueApi.getLeague(leagueId);
-    JSONObject json = league.getBody().getObject();
-    return objectMapper.readValue(json.toString(), LeagueStandingWrapper.class);
+  public LeagueStandingWrapper getLeague(Integer leagueId, Integer page)
+      throws UnirestException, IOException {
+    LeagueStandingWrapper leagueStandingWrapper = new LeagueStandingWrapper();
+    boolean hasNext = true;
+    for (int i = page; i <= page * 5 && hasNext; i++) {
+      HttpResponse<JsonNode> league = fantasyPremierLeagueApi.getLeague(leagueId, i);
+      JSONObject json = league.getBody().getObject();
+      LeagueStandingWrapper currentLeagueStandingsWrapper =
+          objectMapper.readValue(json.toString(), LeagueStandingWrapper.class);
+      if (i == page) {
+        leagueStandingWrapper.setLeague(currentLeagueStandingsWrapper.getLeague());
+        leagueStandingWrapper.setStandings(currentLeagueStandingsWrapper.getStandings());
+      } else {
+        currentLeagueStandingsWrapper.getStandings().getResults().stream()
+            .forEach(r -> leagueStandingWrapper.getStandings().getResults().add(r));
+      }
+      hasNext = currentLeagueStandingsWrapper.getStandings().getHasNext();
+    }
+    return leagueStandingWrapper;
   }
 
   @Override
@@ -84,7 +103,10 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
     return userIds.parallelStream()
         .map(
             userId -> {
-              HttpResponse<JsonNode> league = null;
+                UserPicksWrapper cachedUserPicks = userPickCache.get(userId);
+                if(cachedUserPicks != null) return cachedUserPicks;
+
+                HttpResponse<JsonNode> league = null;
               try {
                 league = fantasyPremierLeagueApi.getPicksByGameweekAndUserId(gameweek, userId);
               } catch (UnirestException e) {
@@ -95,6 +117,7 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
                 UserPicksWrapper userPicksWrapper =
                     objectMapper.readValue(json.toString(), UserPicksWrapper.class);
                 userPicksWrapper.setUserId(userId);
+                userPickCache.put(userId, userPicksWrapper);
                 return userPicksWrapper;
               } catch (IOException e) {
                 e.printStackTrace();
@@ -145,30 +168,32 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
   }
 
   @Override
-  public Map<Integer, Metadata> getEntry(List<Integer> userIds) throws UnirestException, IOException {
-      List<Metadata> collect = userIds.parallelStream()
-              .map(
-                      userId -> {
-                          HttpResponse<JsonNode> league = null;
-                          try {
-                              league = fantasyPremierLeagueApi.getEntry(userId);
-                          } catch (UnirestException e) {
-                              e.printStackTrace();
-                          }
-                          JSONObject json = league.getBody().getObject();
-                          try {
+  public Map<Integer, Metadata> getEntry(List<Integer> userIds)
+      throws UnirestException, IOException {
+    List<Metadata> collect =
+        userIds.parallelStream()
+            .map(
+                userId -> {
+                  HttpResponse<JsonNode> league = null;
+                  try {
+                    league = fantasyPremierLeagueApi.getEntry(userId);
+                  } catch (UnirestException e) {
+                    e.printStackTrace();
+                  }
+                  JSONObject json = league.getBody().getObject();
+                  try {
 
-                              return objectMapper.readValue(json.toString(), Metadata.class);
-                          } catch (IOException e) {
-                              e.printStackTrace();
-                          }
-                          return null;
-                      })
-              .collect(Collectors.toList());
-      Map<Integer, Metadata> map = new HashMap<>();
-    for (Metadata metadata : collect){
+                    return objectMapper.readValue(json.toString(), Metadata.class);
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                  }
+                  return null;
+                })
+            .collect(Collectors.toList());
+    Map<Integer, Metadata> map = new HashMap<>();
+    for (Metadata metadata : collect) {
       map.put(metadata.getId(), metadata);
     }
-      return map;
+    return map;
   }
 }

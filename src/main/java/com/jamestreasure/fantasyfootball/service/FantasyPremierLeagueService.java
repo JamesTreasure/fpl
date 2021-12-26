@@ -18,7 +18,7 @@ public interface FantasyPremierLeagueService {
 
   About getAbout() throws UnirestException, IOException;
 
-  LeagueStandingWrapper getLeague(Integer leagueId) throws UnirestException, IOException;
+  LeagueStandingWrapper getLeague(Integer leagueId, Integer page) throws UnirestException, IOException;
 
   List<FixturesWrapperItem> getFixtures(Integer gameweek) throws UnirestException, IOException;
 
@@ -36,3 +36,4 @@ public interface FantasyPremierLeagueService {
 
   Map<Integer, Metadata> getEntry(List<Integer> userIds) throws UnirestException, IOException;
 }
+ 

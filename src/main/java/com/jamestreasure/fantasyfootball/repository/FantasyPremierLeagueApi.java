@@ -8,7 +8,7 @@ public interface FantasyPremierLeagueApi {
 
   HttpResponse<JsonNode> getAbout() throws UnirestException;
 
-  HttpResponse<JsonNode> getLeague(Integer leagueId) throws UnirestException;
+  HttpResponse<JsonNode> getLeague(Integer leagueId, Integer page) throws UnirestException;
 
   HttpResponse<JsonNode> getFixtures(Integer gameweek) throws UnirestException;
 

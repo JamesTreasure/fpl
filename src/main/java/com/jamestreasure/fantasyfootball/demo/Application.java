@@ -15,10 +15,10 @@ import java.util.Arrays;
 
 @SpringBootApplication
 @ComponentScan(value = {"com.jamestreasure.fantasyfootball"})
-public class DemoApplication {
+public class Application {
 
   public static void main(String[] args) {
-    SpringApplication.run(DemoApplication.class, args);
+    SpringApplication.run(Application.class, args);
   }
 
   @Bean

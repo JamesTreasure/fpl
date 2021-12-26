@@ -33,11 +33,11 @@ public class FantasyPremierLeagueResource {
     return about;
   }
 
-  @RequestMapping(value = "/league/{leagueId}", method = RequestMethod.GET)
-  public LeagueStandingWrapper getLeagueById(@PathVariable String leagueId)
+  @RequestMapping(value = "/league/{leagueId}/{page}", method = RequestMethod.GET)
+  public LeagueStandingWrapper getLeagueById(@PathVariable String leagueId, @PathVariable String page)
       throws IOException, UnirestException {
     LeagueStandingWrapper league =
-        fantasyPremierLeagueService.getLeague(Integer.parseInt(leagueId));
+        fantasyPremierLeagueService.getLeague(Integer.parseInt(leagueId), Integer.parseInt(page));
     return league;
   }
 
