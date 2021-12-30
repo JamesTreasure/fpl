@@ -16,6 +16,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +32,7 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
 
   private final FantasyPremierLeagueApi fantasyPremierLeagueApi;
   private final ObjectMapper objectMapper;
-  private final Map<Integer, UserPicksWrapper> userPickCache = new HashMap<>();
-    @Autowired
-    CacheManager cacheManager;
+  @Autowired CacheManager cacheManager;
 
   @Autowired
   public FantasyPremierLeagueServiceImpl(
@@ -44,9 +43,15 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
 
   @Override
   public About getAbout() throws UnirestException, IOException {
+    Cache aboutCache = cacheManager.getCache("about");
+    About cachedAbout = aboutCache.get("about", About.class);
+    if (cachedAbout != null) return cachedAbout;
+
     HttpResponse<JsonNode> league = fantasyPremierLeagueApi.getAbout();
     JSONObject json = league.getBody().getObject();
-    return objectMapper.readValue(json.toString(), About.class);
+    About about = objectMapper.readValue(json.toString(), About.class);
+    aboutCache.put("about", about);
+    return about;
   }
 
   @Override
@@ -100,13 +105,14 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
   @Override
   public List<UserPicksWrapper> getPicksByGameweekAndUserIds(
       Integer gameweek, List<Integer> userIds) {
+    Cache userPicksCache = cacheManager.getCache("userPicks");
     return userIds.parallelStream()
         .map(
             userId -> {
-                UserPicksWrapper cachedUserPicks = userPickCache.get(userId);
-                if(cachedUserPicks != null) return cachedUserPicks;
+              UserPicksWrapper cachedUserPicks = userPicksCache.get(userId, UserPicksWrapper.class);
+              if (cachedUserPicks != null) return cachedUserPicks;
 
-                HttpResponse<JsonNode> league = null;
+              HttpResponse<JsonNode> league = null;
               try {
                 league = fantasyPremierLeagueApi.getPicksByGameweekAndUserId(gameweek, userId);
               } catch (UnirestException e) {
@@ -117,7 +123,7 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
                 UserPicksWrapper userPicksWrapper =
                     objectMapper.readValue(json.toString(), UserPicksWrapper.class);
                 userPicksWrapper.setUserId(userId);
-                userPickCache.put(userId, userPicksWrapper);
+                userPicksCache.put(userId, userPicksWrapper);
                 return userPicksWrapper;
               } catch (IOException e) {
                 e.printStackTrace();
@@ -137,11 +143,14 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
   @Override
   public Map<Integer, List<Transfer>> getTransfers(List<Integer> userIds)
       throws UnirestException, IOException {
-
+    Cache transferCache = cacheManager.getCache("transfers");
     List<List<Transfer>> collect =
         userIds.parallelStream()
             .map(
                 userId -> {
+                  List<Transfer> cachedUserPicks = transferCache.get(userId, List.class);
+                  if (cachedUserPicks != null) return cachedUserPicks;
+
                   HttpResponse<JsonNode> league = null;
                   try {
                     league = fantasyPremierLeagueApi.getTransfers(userId);
@@ -152,7 +161,7 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
                   try {
                     List<Transfer> transfers =
                         Arrays.asList(objectMapper.readValue(json.toString(), Transfer[].class));
-
+                    transferCache.put(userId, transfers);
                     return transfers;
                   } catch (IOException e) {
                     e.printStackTrace();
@@ -170,10 +179,15 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
   @Override
   public Map<Integer, Metadata> getEntry(List<Integer> userIds)
       throws UnirestException, IOException {
+    Cache metadataCache = cacheManager.getCache("metadata");
     List<Metadata> collect =
         userIds.parallelStream()
             .map(
                 userId -> {
+                  Metadata cachedMetadata = metadataCache.get(userId, Metadata.class);
+
+                  if (cachedMetadata != null) return cachedMetadata;
+
                   HttpResponse<JsonNode> league = null;
                   try {
                     league = fantasyPremierLeagueApi.getEntry(userId);
@@ -183,7 +197,9 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
                   JSONObject json = league.getBody().getObject();
                   try {
 
-                    return objectMapper.readValue(json.toString(), Metadata.class);
+                    Metadata metadata = objectMapper.readValue(json.toString(), Metadata.class);
+                    metadataCache.put(userId, metadata);
+                    return metadata;
                   } catch (IOException e) {
                     e.printStackTrace();
                   }

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -20,47 +21,23 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class CacheConfiguration {
 
-    public static final String CACHE_A = "cacheA";
-    public static final String CACHE_B = "cacheB";
-    public static final String CACHE_C = "cacheC";
-
     @Bean
-    public CacheManager cacheManagerTicker(Ticker ticker) {
+    public CacheManager cacheManager(Ticker ticker) {
+        CaffeineCache userPicks = buildCache("userPicks", ticker, 100000);
+        CaffeineCache metadata = buildCache("metadata", ticker, 100000);
+        CaffeineCache transfers = buildCache("transfers", ticker, 100000);
+        CaffeineCache about = buildCache("about", ticker, 100000);
 
-        List<Cache> caches = new ArrayList<>();
-
-        // Cache A
-        caches.add(this.buildCache(CACHE_A, ticker, 2000L, 1L, TimeUnit.HOURS));
-
-        // Cache B
-        caches.add(this.buildCache(CACHE_B, ticker, 2000L, 1L, TimeUnit.HOURS));
-
-        // Cache C
-        caches.add(this.buildCache(CACHE_C, ticker, 3500L, 15L, TimeUnit.MINUTES));
-
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
-        cacheManager.setCaches(caches);
-        return cacheManager;
+        SimpleCacheManager manager = new SimpleCacheManager();
+        manager.setCaches(Arrays.asList(userPicks, metadata, transfers, about));
+        return manager;
     }
 
-    private CaffeineCache buildCache(String cacheName, Ticker ticker, Long maxSize, Long ttl, TimeUnit ttlUnit){
-
-        Caffeine<Object, Object> cacheBuilder = Caffeine.newBuilder();
-
-        // TTL
-        if (ttl != null && ttl > 0 && ttlUnit != null){
-            cacheBuilder.expireAfterWrite(ttl, ttlUnit);
-        }
-
-        // Max size
-        if (maxSize != null && maxSize > 0){
-            cacheBuilder.maximumSize(maxSize);
-        }
-
-        // Ticker
-        cacheBuilder.ticker(ticker);
-
-        return new CaffeineCache(cacheName, cacheBuilder.build());
+    private CaffeineCache buildCache(String name, Ticker ticker, int maxiumumSize) {
+        return new CaffeineCache(name, Caffeine.newBuilder()
+                .maximumSize(maxiumumSize)
+                .ticker(ticker)
+                .build());
     }
 
     @Bean
