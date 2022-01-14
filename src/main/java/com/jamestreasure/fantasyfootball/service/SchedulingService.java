@@ -1,7 +1,5 @@
 package com.jamestreasure.fantasyfootball.service;
 
-import com.github.javafaker.ChuckNorris;
-import com.jamestreasure.fantasyfootball.dto.OutputMessage;
 import com.jamestreasure.fantasyfootball.dto.event.EventWrapper;
 import com.jamestreasure.fantasyfootball.dto.event.status.EventStatusWrapper;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -23,21 +21,21 @@ public class SchedulingService {
   @Autowired FantasyPremierLeagueService fantasyPremierLeagueService;
   @Autowired SimpMessagingTemplate simpMessagingTemplate;
 
-  private Integer previousCurrentGameweek;
+  private Integer currentGameweek;
 
   @Scheduled(fixedRate = 30000, initialDelay = 30000)
   public void expireCache() throws UnirestException, IOException {
 
     EventStatusWrapper eventStatusWrapper = fantasyPremierLeagueService.getCurrentGameweek();
-    int currentGameweek = eventStatusWrapper.getStatus().stream().findFirst().get().getEvent();
+    int liveGameweek = eventStatusWrapper.getStatus().stream().findFirst().get().getEvent();
 
-    if (previousCurrentGameweek == null || previousCurrentGameweek == 0) {
-      previousCurrentGameweek = currentGameweek;
+    if (currentGameweek == null || currentGameweek == 0) {
+      currentGameweek = liveGameweek;
     }
 
-    if (currentGameweek > previousCurrentGameweek) {
+    if (liveGameweek > currentGameweek) {
       cacheManager.getCacheNames().stream().forEach(cache -> cacheManager.getCache(cache).clear());
-      previousCurrentGameweek = currentGameweek;
+      currentGameweek = liveGameweek;
     }
   }
 
@@ -47,13 +45,13 @@ public class SchedulingService {
     EventStatusWrapper eventStatusWrapper = fantasyPremierLeagueService.getCurrentGameweek();
     int currentGameweek = eventStatusWrapper.getStatus().stream().findFirst().get().getEvent();
 
-    if (previousCurrentGameweek == null || previousCurrentGameweek == 0) {
-      previousCurrentGameweek = currentGameweek;
+    if (this.currentGameweek == null || this.currentGameweek == 0) {
+      this.currentGameweek = currentGameweek;
     }
 
-    if (currentGameweek > previousCurrentGameweek) {
+    if (currentGameweek > this.currentGameweek) {
       cacheManager.getCacheNames().stream().forEach(cache -> cacheManager.getCache(cache).clear());
-      previousCurrentGameweek = currentGameweek;
+      this.currentGameweek = currentGameweek;
     }
   }
 
@@ -61,7 +59,7 @@ public class SchedulingService {
   @MessageMapping("/hello")
   public void sendMessage() throws UnirestException, IOException {
     final String time = new SimpleDateFormat("HH:mm").format(new Date());
-    EventWrapper event = fantasyPremierLeagueService.getEvent(21);
+    EventWrapper event = fantasyPremierLeagueService.getEvent(currentGameweek);
     simpMessagingTemplate.convertAndSend(
         "/notification/message", event);
     System.out.println("Sent");

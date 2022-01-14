@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c725302a-d9c8-4001-8c55-39b4e1bb9e3c" name="Default Changelist" comment="Live updates">
+    <list default="true" id="c725302a-d9c8-4001-8c55-39b4e1bb9e3c" name="Default Changelist" comment="Fix app">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/service/SchedulingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/service/SchedulingService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,7 +228,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642177157655</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fix app">
+      <created>1642178849933</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1642178849933</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -280,7 +286,8 @@
     <MESSAGE value="Add DTOs" />
     <MESSAGE value="Make it all work again" />
     <MESSAGE value="Live updates" />
-    <option name="LAST_COMMIT_MESSAGE" value="Live updates" />
+    <MESSAGE value="Fix app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix app" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
