@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c725302a-d9c8-4001-8c55-39b4e1bb9e3c" name="Default Changelist" comment="Make it all work again">
-      <change beforePath="$PROJECT_DIR$/.idea/fpl.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fpl.iml" afterDir="false" />
+    <list default="true" id="c725302a-d9c8-4001-8c55-39b4e1bb9e3c" name="Default Changelist" comment="Live updates">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/demo/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/demo/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/demo/CacheConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/demo/CacheConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/service/SchedulingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/jamestreasure/fantasyfootball/service/SchedulingService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +222,14 @@
       <option name="project" value="LOCAL" />
       <updated>1639176597306</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Live updates">
+      <created>1642177157655</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1642177157655</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -275,7 +279,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add DTOs" />
     <MESSAGE value="Make it all work again" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make it all work again" />
+    <MESSAGE value="Live updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Live updates" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

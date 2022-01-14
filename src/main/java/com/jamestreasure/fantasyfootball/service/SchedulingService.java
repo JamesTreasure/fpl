@@ -22,7 +22,6 @@ public class SchedulingService {
   @Autowired CacheManager cacheManager;
   @Autowired FantasyPremierLeagueService fantasyPremierLeagueService;
   @Autowired SimpMessagingTemplate simpMessagingTemplate;
-  @Autowired ChuckNorris chuckNorris;
 
   private Integer previousCurrentGameweek;
 
