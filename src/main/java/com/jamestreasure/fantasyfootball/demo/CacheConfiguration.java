@@ -10,6 +10,7 @@ import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 @EnableCaching
 @Configuration
+@EnableScheduling
 public class CacheConfiguration {
 
     @Bean
