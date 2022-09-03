@@ -59,9 +59,12 @@ public class SchedulingService {
   @MessageMapping("/hello")
   public void sendMessage() throws UnirestException, IOException {
     final String time = new SimpleDateFormat("HH:mm").format(new Date());
-    EventWrapper event = fantasyPremierLeagueService.getEvent(currentGameweek);
-    simpMessagingTemplate.convertAndSend(
-        "/notification/message", event);
-    System.out.println("Sent");
+    if(currentGameweek != null){
+      EventWrapper event = fantasyPremierLeagueService.getEvent(currentGameweek);
+      simpMessagingTemplate.convertAndSend(
+              "/notification/message", event);
+      System.out.println("Sent");
+    }
+
   }
 }

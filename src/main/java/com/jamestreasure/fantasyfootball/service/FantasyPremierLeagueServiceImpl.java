@@ -171,7 +171,10 @@ public class FantasyPremierLeagueServiceImpl implements FantasyPremierLeagueServ
             .collect(Collectors.toList());
     Map<Integer, List<Transfer>> map = new HashMap<>();
     for (List<Transfer> transfers : collect) {
-      map.put(transfers.get(0).getEntry(), transfers);
+        if(!transfers.isEmpty()){
+
+            map.put(transfers.get(0).getEntry(), transfers);
+        }
     }
     return map;
   }
