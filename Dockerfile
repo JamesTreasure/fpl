@@ -1,13 +1,11 @@
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM maven:3.6.3-openjdk-14-slim AS build
+RUN mkdir -p /workspace
+WORKDIR /workspace
+COPY pom.xml /workspace
+COPY src /workspace/src
+RUN mvn -B package --file pom.xml -DskipTests
 
-# Refer to Maven build -> finalName
-ARG JAR_FILE=target/demo-0.0.1-SNAPSHOT.jar
-
-# cd /opt/app
-WORKDIR /opt/app
-
-# cp target/spring-boot-web.jar /opt/app/app.jar
-COPY ${JAR_FILE} app.jar
-
-# java -jar /opt/app/app.jar
+FROM openjdk:14-slim
+COPY --from=build /workspace/target/*jar-with-dependencies.jar app.jar
+EXPOSE 6379
 ENTRYPOINT ["java","-jar","app.jar"]
